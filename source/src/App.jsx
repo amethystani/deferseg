@@ -39,6 +39,7 @@ function Divider() {
 }
 
 // Anonymized static mirrors serve pages in an opaque-origin sandbox where YouTube embeds render black.
+// Pop-ups inherit that sandbox and YouTube's COOP blocks them, so the fallback link navigates the same tab.
 const sandboxed = (() => {
   try {
     return window.location.origin === "null" || !window.localStorage;
@@ -52,8 +53,7 @@ function Video({ id, title }) {
     return (
       <a
         href={`https://www.youtube.com/watch?v=${id}`}
-        target="_blank"
-        rel="noopener noreferrer"
+        rel="noreferrer"
         aria-label={`Watch ${title} on YouTube`}
         className="group absolute inset-0 flex items-center justify-center"
       >
