@@ -8,7 +8,6 @@ const results = [
 ];
 
 const datasets = [
-  ["Render", "https://arxiv.org/abs/2309.07646", "Large-scale synthetic dataset for object detection and segmentation."],
   ["COCO", "https://cocodataset.org", "Common Objects in Context: large-scale object detection, segmentation, and captioning."],
   ["ADE20K", "http://ade20k.csail.mit.edu", "Scene parsing dataset with 150 object and stuff classes."],
   ["CUB-200-2011", "http://www.vision.caltech.edu/datasets/cub_200_2011", "Fine-grained bird species categorization and segmentation."],
@@ -39,6 +38,48 @@ function Divider() {
   return <div className="my-10 border-t border-neutral-300" />;
 }
 
+// Anonymized static mirrors serve pages in an opaque-origin sandbox where YouTube embeds render black.
+const sandboxed = (() => {
+  try {
+    return window.location.origin === "null" || !window.localStorage;
+  } catch {
+    return true;
+  }
+})();
+
+function Video({ id, title }) {
+  if (sandboxed) {
+    return (
+      <a
+        href={`https://www.youtube.com/watch?v=${id}`}
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label={`Watch ${title} on YouTube`}
+        className="group absolute inset-0 flex items-center justify-center"
+      >
+        <img
+          src={`https://i.ytimg.com/vi/${id}/hqdefault.jpg`}
+          alt={title}
+          className="absolute inset-0 h-full w-full object-cover opacity-70 transition-opacity group-hover:opacity-100"
+        />
+        <span className="relative border border-[#f4efe2] bg-neutral-950/80 px-4 py-2 font-mono text-[10px] uppercase tracking-[0.2em] text-[#f4efe2]">
+          ▶ Watch on YouTube
+        </span>
+      </a>
+    );
+  }
+  return (
+    <iframe
+      src={`https://www.youtube.com/embed/${id}`}
+      title={title}
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+      allowFullScreen
+      className="absolute inset-0 w-full h-full"
+      style={{ border: 0 }}
+    />
+  );
+}
+
 export default function NSGSResearchSite() {
   return (
     <main className="min-h-screen overflow-x-hidden bg-[#f4efe2] text-neutral-950 selection:bg-neutral-950 selection:text-[#f4efe2]">
@@ -55,14 +96,7 @@ export default function NSGSResearchSite() {
               <span className="font-mono text-[9px] uppercase tracking-[0.14em] text-neutral-400">Slides</span>
             </div>
             <div className="relative bg-black min-h-[calc(100vh-120px)]">
-              <iframe
-                src="https://www.youtube.com/embed/frApwwEJxuM"
-                title="NSGS Presentation"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-                className="absolute inset-0 w-full h-full"
-                style={{ border: 0 }}
-              />
+              <Video id="frApwwEJxuM" title="NSGS Presentation" />
             </div>
           </div>
 
@@ -73,14 +107,7 @@ export default function NSGSResearchSite() {
               <span className="font-mono text-[9px] uppercase tracking-[0.14em] text-neutral-400">Video</span>
             </div>
             <div className="relative bg-black min-h-[calc(100vh-120px)]">
-              <iframe
-                src="https://www.youtube.com/embed/TzsqbhIkf8Y"
-                title="NSGS Demo"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-                className="absolute inset-0 w-full h-full"
-                style={{ border: 0 }}
-              />
+              <Video id="TzsqbhIkf8Y" title="NSGS Demo" />
             </div>
           </div>
 
@@ -275,7 +302,7 @@ export default function NSGSResearchSite() {
           <div>
             <SectionTag>04 Datasets</SectionTag>
           </div>
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
             {datasets.map(([name, link, description]) => (
               <a
                 key={name}
