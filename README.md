@@ -2,7 +2,7 @@
 
 Tile-scheduled neural passes for real-time compositing.
 
-Project site for *Efficient Image Segmentation on Smartphones via Attention-Guided Distillation and Block-Sparse Decoding*, published at https://amethystani.github.io/deferseg/.
+Project site for *Efficient Image Segmentation on Smartphones via Attention-Guided Distillation and Block-Sparse Decoding*.
 
 ```bash
 npm ci
